@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Postal Pincode:Lets Find It</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <main class="container">
+        <div class="py-5 rounded">
+
+            <header class="d-flex">
+                <h1 class="col-10 text-dark"><u>Indian Postal Pin Code</u></h1>
+                <img class="col-2" src="/img/Indian-post-office.v2.jpg" alt="">
+            </header>
+
+            <form name="pincode" class="pt-5">
+                <label>
+                    <input type="text" placeholder="Enter Pin Code" name="pin" required pattern="^[0-9]{6}$">
+                </label>
+                <button class="btn btn-success">Check</button>
+                <input class="btn btn-danger" type="reset" value="Reset">
+                <span class="err"></span>
+            </form>
+
+            <table class="pins table my-4 table-info">
+                <thead>
+                    <tr>
+                        <th scope="col">Sn.No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">District</th>
+                        <th scope="col">Division</th>
+                        <th scope="col">State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+
+        "use strict";
+
+        document.pincode.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let pin = this.pin.value;
+            document.querySelector(".pins tbody").innerHTML = "";
+
+
+            fetch(`https://api.postalpincode.in/pincode/${pin}`).then(i => i.json()).then(i => {
+
+                if (i[0].Status == "Error") {
+                    document.querySelector(".err").textContent = "No Pincode Found";
+                }
+                else {
+                    let data = i[0].PostOffice;
+                    data.forEach((j, k) => {
+                        console.log(k);
+                        document.querySelector(".pins tbody").innerHTML += `<tr><td>${k + 1}</td><td>${j.Name}</td><td>${j.District}</td><td>${j.Division}</td><td>${j.State}</td></tr>`
+                    });
+                }
+
+            });
+
+        });
+    </script>
+</body>
+
+</html>
