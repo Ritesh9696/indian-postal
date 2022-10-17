@@ -27,6 +27,7 @@
                 <button class="btn btn-success">Check</button>
                 <input class="btn btn-danger" type="reset" value="Reset">
                 <span class="err"></span>
+                <img src="css/loader.svg" class="loader" width="70px" height="70px" alt="">
             </form>
 
             <table class="pins table my-4 table-info">
@@ -45,18 +46,20 @@
         </div>
     </main>
     <script>
-
+          
         "use strict";
 
         document.pincode.addEventListener("submit", function (e) {
             e.preventDefault();
+            document.querySelector(".loader").style.display="inline";
 
             let pin = this.pin.value;
             document.querySelector(".pins tbody").innerHTML = "";
 
 
             fetch(`https://api.postalpincode.in/pincode/${pin}`).then(i => i.json()).then(i => {
-
+                 
+                document.querySelector(".loader").style.display="none";
                 if (i[0].Status == "Error") {
                     document.querySelector(".err").textContent = "No Pincode Found";
                 }
